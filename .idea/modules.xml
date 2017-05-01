@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ProgrammJava/JavaRushTasks/1.JavaSyntax/1.JavaSyntax.iml" filepath="$PROJECT_DIR$/ProgrammJava/JavaRushTasks/1.JavaSyntax/1.JavaSyntax.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProgrammJava/JavaRushHomeWork/JavaRushHomeWork/JavaRushTasks/1.JavaSyntax/1.JavaSyntax1.iml" filepath="$PROJECT_DIR$/ProgrammJava/JavaRushHomeWork/JavaRushHomeWork/JavaRushTasks/1.JavaSyntax/1.JavaSyntax1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProgrammJava/JavaRushTasks/2.JavaCore/2.JavaCore.iml" filepath="$PROJECT_DIR$/ProgrammJava/JavaRushTasks/2.JavaCore/2.JavaCore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProgrammJava/JavaRushHomeWork/JavaRushHomeWork/JavaRushTasks/2.JavaCore/2.JavaCore1.iml" filepath="$PROJECT_DIR$/ProgrammJava/JavaRushHomeWork/JavaRushHomeWork/JavaRushTasks/2.JavaCore/2.JavaCore1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProgrammJava/JavaRushHomeWork/JavaRushHomeWork/JavaRushHomeWork.iml" filepath="$PROJECT_DIR$/ProgrammJava/JavaRushHomeWork/JavaRushHomeWork/JavaRushHomeWork.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProgrammJava/JavaRushTasks/JavaRushTasks.iml" filepath="$PROJECT_DIR$/ProgrammJava/JavaRushTasks/JavaRushTasks.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProgrammJava/JavaRushHomeWork/JavaRushHomeWork/JavaRushTasks/JavaRushTasks1.iml" filepath="$PROJECT_DIR$/ProgrammJava/JavaRushHomeWork/JavaRushHomeWork/JavaRushTasks/JavaRushTasks1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProgrammJava/JavaRushHomeWork/JavaRushHomeWork/JavaRushTasks/MyJavaCode/MyJavaCode.iml" filepath="$PROJECT_DIR$/ProgrammJava/JavaRushHomeWork/JavaRushHomeWork/JavaRushTasks/MyJavaCode/MyJavaCode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProgrammJava/JavaRushTasks/MyJavaCode/MyJavaCode1.iml" filepath="$PROJECT_DIR$/ProgrammJava/JavaRushTasks/MyJavaCode/MyJavaCode1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProgrammJava/ProgrammJava.iml" filepath="$PROJECT_DIR$/ProgrammJava/ProgrammJava.iml" />
+    </modules>
+  </component>
+</project>
