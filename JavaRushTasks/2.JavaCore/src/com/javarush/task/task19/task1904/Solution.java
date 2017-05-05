@@ -1,6 +1,7 @@
 package com.javarush.task.task19.task1904;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -35,9 +36,16 @@ public class Solution {
         @Override
         public Person read() throws IOException {
             String[] arrPerson = new String[6];
-            arrPerson = this.fileScanner.next().split(" ");
+            SimpleDateFormat ft = new SimpleDateFormat("ddMMyyyy");
+            arrPerson = this.fileScanner.nextLine().split(" ");
             this.fileScanner.close();
-            return new Person(arrPerson[0], arrPerson[1], arrPerson[2], new Date(arrPerson[3] + arrPerson[4] + arrPerson[5]));
+            Date bDate = new Date();
+            try {
+                bDate = ft.parse(arrPerson[3] + arrPerson[4] + arrPerson[5]);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return new Person(arrPerson[1], arrPerson[2], arrPerson[0], bDate);
         }
 
         @Override
