@@ -1,7 +1,7 @@
 <application>
   <component name="FindSettings">
-    <option name="customScope" value="File '[Fedorenko] - ...\src\lab3\Teapot.java'" />
-    <option name="defaultScopeName" value="File '[Fedorenko] - ...\src\lab3\Teapot.java'" />
-    <option name="SEARCH_SCOPE" value="File '[Fedorenko] - ...\src\lab3\Teapot.java'" />
+    <option name="customScope" value="File '[Fedorenko] - ...\src\lab3\TestTeapot.java'" />
+    <option name="defaultScopeName" value="File '[Fedorenko] - ...\src\lab3\TestTeapot.java'" />
+    <option name="SEARCH_SCOPE" value="File '[Fedorenko] - ...\src\lab3\TestTeapot.java'" />
   </component>
 </application>
