@@ -6,6 +6,8 @@ package com.javarush.task.task19.task1913;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Solution {
     public static TestString testString = new TestString();
@@ -16,7 +18,10 @@ public class Solution {
         System.setOut(new PrintStream(outputStream));
         testString.printSomething();
         System.setOut(consoleStream);
-        System.out.println(outputStream.toString().);
+        Pattern p = Pattern.compile("\\D");
+        Matcher m = p.matcher(outputStream.toString());
+
+        System.out.println(m.replaceAll(""));
     }
 
     public static class TestString {
