@@ -1,7 +1,7 @@
-package com.javarush.task.task19.task1911;
+package com.javarush.task.task19.task1913;
 
 /* 
-Ридер обертка
+Выводим только цифры
 */
 
 import java.io.ByteArrayOutputStream;
@@ -16,13 +16,12 @@ public class Solution {
         System.setOut(new PrintStream(outputStream));
         testString.printSomething();
         System.setOut(consoleStream);
-        System.out.println(outputStream.toString().toUpperCase());
-
+        System.out.println(outputStream.toString().);
     }
 
     public static class TestString {
         public void printSomething() {
-            System.out.println("it's a text for testing");
+            System.out.println("it's 1 a 23 text 4 f5-6or7 tes8ting");
         }
     }
 }
