@@ -6,6 +6,7 @@ package com.javarush.task.task19.task1914;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,21 +19,26 @@ public class Solution {
         System.setOut(new PrintStream(outputStream));
         testString.printSomething();
         System.setOut(consoleStream);
-        int argA=0,argB=0;
-        Pattern p = Pattern.compile("\\d");
-        String str = outputStream.toString().replaceAll(System.getProperty("line.separator"),"");
-        Matcher m = p.matcher(str);
-        m.find();
-        argA = Integer.parseInt(str.substring(m.start(),m.end()));
-        m.find();
-        argB = Integer.parseInt(str.substring(m.start(),m.end()));
-        if (str.indexOf('+')>0)
-            str = str+(argA + argB);
-        else if (str.indexOf('-')>0)
-            str = str+(argA - argB);
-        else
-            str = str+"0";
-        System.out.println(str);
+        ArrayList<Integer> arg = new ArrayList<>();
+        String operator = "";
+        String[] nu = outputStream.toString().split(" ");
+        for (String s : nu) {
+            if (s.matches("[+-]?\\d+")) { //если число - true
+                arg.add(Integer.valueOf(s));
+            } else {
+                if (s.equals("=")) break;
+                else operator = s;
+            }
+        }
+        String result = "";
+        if (operator.equals("+"))
+            result = result+(arg.get(0) + arg.get(1));
+        else if (operator.equals("-"))
+            result = result+(arg.get(0) - arg.get(1));
+        else if (operator.equals("*"))
+            result = result+(arg.get(0) * arg.get(1));
+
+        System.out.println( outputStream.toString().replaceAll(System.getProperty("line.separator"),"") + result);
     }
 
     public static class TestString {
