@@ -25,7 +25,7 @@ public class Solution {
         int endCoordinatesX = -1;
         int endCoordinatesY = -1;
         boolean isRectangle = false;
-        int coutRectangle = 0;
+        int countRectangle = 0;
         byte element = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -53,7 +53,7 @@ public class Solution {
                 //Если все координаты заполнены считаем счетчик
                 if (beginCoordinatesX >= 0 && beginCoordinatesY >= 0
                         && endCoordinatesX >= 0 && endCoordinatesY >= 0) {
-                    coutRectangle++; // считаем прямоугольник
+                    countRectangle++; // считаем прямоугольник
 //                    исключаем прямоугольник из поиска
                     for (int ii = beginCoordinatesY; ii <=endCoordinatesY ; ii++) {
                         for (int jj = beginCoordinatesX; jj <=endCoordinatesX; jj++) {
@@ -70,6 +70,6 @@ public class Solution {
                 }
             }
         }
-        return coutRectangle;
+        return countRectangle;
     }
 }
