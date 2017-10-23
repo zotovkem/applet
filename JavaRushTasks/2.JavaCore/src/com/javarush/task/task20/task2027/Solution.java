@@ -17,7 +17,7 @@ public class Solution {
                 {'u', 'l', 'p', 'r', 'r', 'h'},
                 {'p', 'o', 'e', 'e', 'j', 'j'}
         };
-        List<Word> words = detectAllWords(crossword, "same", "home");
+        List<Word> words = detectAllWords(crossword, "home", "same" );
         for (Word word :
                 words) {
             System.out.println(word);
@@ -39,70 +39,47 @@ same - (1, 1) - (4, 1)
             resWord.setStartPoint(-1, -1);
             resWord.setEndPoint(-1, -1);
             char[] arrWord = word.toCharArray();
-            int countFindLiter = 0;
-            for (int k = 0; k < arrWord.length; k++) {
-                int ii = 0, jj = 0, stepLiterX = 1, stepLiterY = 1;
-                for (int i = 0; i < 5; i++) {
-                    for (int j = 0; j < 6; j++) {
-                        int element = crossword[i][j];
-                        if (resWord.endX == -1 && resWord.endY == -1) {
-                            if (element == (int) arrWord[k]) {//найдена буква
-                                if (resWord.startY < 0 && resWord.startX < 0) {//первая буква
-                                    if (verifyWord.contains("" + j + i)) {
-                                        continue; // смотрим в мапе, варианты не законченный слов.
-                                    }
-                                    resWord.setStartPoint(j, i);
-                                    ii = i;
-                                    jj = j;
-                                    k = k >= 3 ? 3 : k + 1;
-                                    countFindLiter++;
-                                    i = j = 0;
-                                } else {
-                                    if ((i == ii - 1 && j == jj - 1) ||
-                                            (i == ii + 1 && j == jj + 1) ||
-                                            (i == ii - 1 && j == jj) ||
-                                            (i == ii && j == jj - 1) ||
-                                            (i == ii + 1 && j == jj) ||
-                                            (i == ii && j == jj + 1) ||
-                                            (i == ii + 1 && j == jj - 1) ||
-                                            (i == ii - 1 && j == jj + 1)
-                                            ) {
-
-                                        if (countFindLiter == 1) { //Если найдена вторая буква, запоминаем направление слова
-                                            stepLiterY = i - ii;
-                                            stepLiterX = j - jj;
-                                            ii = i;
-                                            jj = j;
-                                            i = j = 0;
-                                            k = k >= 3 ? 3 : k + 1;
-                                            countFindLiter++;
-                                        } else if (i == ii + stepLiterY && j == jj + stepLiterX) {
-                                            countFindLiter++;
-                                            if (countFindLiter == arrWord.length) { // если последняя буква, запоминаем конечные координаты слова
-                                                resWord.setEndPoint(j, i);
-                                                break;
+            for (int i = 0; i < crossword.length; i++) {
+                for (int j = 0; j < crossword[0].length; j++) {
+                    if (resWord.endX == -1 && resWord.endY == -1) {
+                        if (crossword[i][j] == (int) arrWord[0] && resWord.startY < 0 && resWord.startX < 0) {//найдена буква
+                            if (verifyWord.contains("" + j + i)) {
+                                continue; // смотрим в мапе, варианты не законченный слов.
+                            }
+                            resWord.setStartPoint(j, i);
+                            //определяем направление
+                            for (int routeI = -1; routeI < 2; routeI++) {
+                                for (int routeJ = -1; routeJ < 2; routeJ++) {
+                                    if (j + routeJ < crossword[0].length && i + routeI < crossword.length && j + routeJ >= 0 && i + routeI >= 0) {
+                                        if (arrWord[1] == crossword[i + routeI][j + routeJ]) {
+                                            int wordI = i + routeI, wordJ = j + routeJ;
+                                            for (int k = 2; k < arrWord.length; k++) {
+                                                wordI += routeI;
+                                                wordJ += routeJ;
+                                                if (wordJ < crossword[0].length   && wordI < crossword.length && wordI >= 0 && wordJ >= 0) {
+                                                    if (arrWord[k] == crossword[wordI][wordJ]) {
+                                                        if (k == arrWord.length-1) { // если последняя буква, запоминаем конечные координаты слова
+                                                            resWord.setEndPoint(wordJ,wordI);
+                                                            break;
+                                                        }
+                                                    }
+                                                    else break;
+                                                }
                                             }
-                                            // последующие буквы по направлению слова
-                                            ii = i;
-                                            jj = j;
-                                            k = k >= 3 ? 3 : k + 1;
-                                            i = j = 0;
                                         }
                                     }
                                 }
-
+                            }
+                            // проверяем на заполнение конечных кординат
+                            if (resWord.startY > -1 && resWord.startX > -1 && resWord.endY > -1 && resWord.endX > -1) {
+                                resWords.add(resWord);
+                            } else {
+                                if (resWord.startY > -1 && resWord.startX > -1 && resWord.endY == -1 && resWord.endX == -1) {
+                                    verifyWord.add("" + resWord.startX + resWord.startY);
+                                    resWord.setStartPoint(-1, -1);
+                                }
                             }
                         }
-                    }
-                }
-                if (resWord.startY > -1 && resWord.startX > -1 && resWord.endY > -1 && resWord.endX > -1 && k == arrWord.length - 1) {
-                    resWords.add(resWord);
-                } else {
-                    if (resWord.startY > -1 && resWord.startX > -1 && resWord.endY == -1 && resWord.endX == -1 && k == arrWord.length - 1) {
-                        verifyWord.add("" + resWord.startX + resWord.startY);
-                        resWord.setStartPoint(-1, -1);
-                        k = -1;
-                        countFindLiter = 0;
                     }
                 }
             }
