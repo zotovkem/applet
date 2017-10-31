@@ -14,12 +14,12 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         SearchFileVisitor searchFileVisitor = new SearchFileVisitor();
 
-        searchFileVisitor.setPartOfName("amigo");
+        searchFileVisitor.setPartOfName("1");
         searchFileVisitor.setPartOfContent("programmer");
-        searchFileVisitor.setMinSize(500);
+        searchFileVisitor.setMinSize(5);
         searchFileVisitor.setMaxSize(10000);
 
-        Files.walkFileTree(Paths.get("D:/SecretFolder"), searchFileVisitor);
+        Files.walkFileTree(Paths.get("C:/Temp"), searchFileVisitor);
 
         List<Path> foundFiles = searchFileVisitor.getFoundFiles();
         for (Path file : foundFiles) {
