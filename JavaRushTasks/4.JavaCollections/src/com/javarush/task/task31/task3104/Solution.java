@@ -12,10 +12,27 @@ import java.util.List;
 Поиск скрытых файлов
 */
 public class Solution extends SimpleFileVisitor<Path> {
+    private List<String> archived = new ArrayList<>();
+    private List<String> failed = new ArrayList<>();
+
+    @Override
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:*.{rar,zip}");
+        if (matcher.matches(file.getFileName()))
+            this.archived.add(file.toAbsolutePath().toString());
+        return super.visitFile(file, attrs);
+    }
+
+    @Override
+    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+        this.failed.add(file.toAbsolutePath().toString());
+        return FileVisitResult.SKIP_SUBTREE;
+    }
+
     public static void main(String[] args) throws IOException {
         EnumSet<FileVisitOption> options = EnumSet.of(FileVisitOption.FOLLOW_LINKS);
         final Solution solution = new Solution();
-        Files.walkFileTree(Paths.get("D:/"), options, 20, solution);
+        Files.walkFileTree(Paths.get("C:/Users/"), options, 20, solution);
 
         List<String> result = solution.getArchived();
         System.out.println("All archived files:");
@@ -28,10 +45,8 @@ public class Solution extends SimpleFileVisitor<Path> {
         for (String path : failed) {
             System.out.println("\t" + path);
         }
-    }
 
-    private List<String> archived = new ArrayList<>();
-    private List<String> failed = new ArrayList<>();
+    }
 
     public List<String> getArchived() {
         return archived;
