@@ -1,10 +1,10 @@
 package com.javarush.task.task31.task3105;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -16,53 +16,42 @@ import java.util.zip.ZipOutputStream;
 */
 public class Solution {
     public static void main(String[] args) throws IOException {
-        String fileName;
-        String pathFileName;
-        String pathZipName;
-        if (args.length > 0) {
-            pathFileName = args[0];
-            fileName = Paths.get(pathFileName).getFileName().toString();
-            pathZipName = args[1];
-        } else {
-            return;
-        }
-        ZipInputStream zipRead = new ZipInputStream(new FileInputStream(pathZipName));
-        Map<ZipEntry,ByteArrayOutputStream> zipEntryMap = new HashMap<>();
-        ZipEntry zipEntryFile;
-        while ((zipEntryFile = zipRead.getNextEntry()) != null) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int count;
-            while ((count=zipRead.read(buffer))>0)
-            {
-                baos.write(buffer,0,count);
-            }
-            zipEntryMap.put(zipEntryFile,baos);
-        }
-        zipRead.closeEntry();
-        zipRead.close();
+        String fileName = args[0];
+        String zipFile = args[1];
+        Map<ZipEntry, StringBuffer> map = new HashMap<>();
+        try (
+                ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));)
 
-        ZipOutputStream zipWrite = new ZipOutputStream(new FileOutputStream(pathZipName));
-        for (Map.Entry<ZipEntry,ByteArrayOutputStream> zipEntryFileWrite:
-             zipEntryMap.entrySet()) {
-            if (zipEntryFileWrite.getKey().toString().equals("/new/" + fileName)) {
-                zipWrite.putNextEntry(new ZipEntry("/new/" + fileName));
-                Files.copy(Paths.get(pathFileName), zipWrite);
-            }
-            else {
-                if (zipEntryFileWrite.getKey().toString().equals(fileName)){
-                    zipWrite.putNextEntry(new ZipEntry("/new/" + fileName));
-                    Files.copy(Paths.get(pathFileName), zipWrite);
+        {
+            ZipEntry entry;
+            int i;
+            while ((entry = zis.getNextEntry()) != null) {
+                StringBuffer sb = new StringBuffer();
+                while ((i = zis.read()) != -1) {
+                    sb.append((char) i);
                 }
-                else {
-                    zipWrite.putNextEntry(new ZipEntry(zipEntryFileWrite.getKey()));
-ByteArrayInputStream arr = new ByteArrayInputStream(zipEntryFileWrite.getValue().toByteArray());
-                    zipEntryFileWrite.getValue().toByteArray();
-                    Files.copy((Path) arr,zipWrite);
-                }
+                map.put(entry, sb);
             }
+            File file = new File(fileName);
+            try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile));) {
+                zos.putNextEntry(new ZipEntry("new/" + file.getName()));
+                Files.copy(file.toPath(), zos);
+                for (Map.Entry<ZipEntry, StringBuffer> pair : map.entrySet()) {
+                    if (!pair.getKey().getName().equals(file.getName())) {
+                        zos.putNextEntry(pair.getKey());
+                        for (char c : pair.getValue().toString().toCharArray()) {
+                            zos.write(c);
+                        }
+                    } else {
+                        zos.putNextEntry(new ZipEntry(pair.getKey().getName()));
+                        Files.copy(file.toPath(), zos);
+                    }
+                }
+                zis.close();
+                zos.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        zipWrite.closeEntry();
-        zipWrite.close();
     }
 }

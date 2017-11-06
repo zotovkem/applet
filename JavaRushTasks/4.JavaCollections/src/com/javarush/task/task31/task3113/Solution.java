@@ -36,14 +36,12 @@ public class Solution extends SimpleFileVisitor<Path> {
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
         countDir++;
         return super.preVisitDirectory(dir, attrs);
-//        return FileVisitResult.SKIP_SIBLINGS;
     }
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
         countFiles++;
         weightFiles += Files.size(file);
-//        return FileVisitResult.CONTINUE;
         return super.visitFile(file, attrs);
     }
 }
