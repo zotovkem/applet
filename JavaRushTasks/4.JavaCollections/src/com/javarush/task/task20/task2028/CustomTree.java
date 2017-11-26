@@ -9,7 +9,37 @@ import java.util.List;
 Построй дерево(1)
 */
 public class CustomTree extends AbstractList implements Cloneable, Serializable {
-    public static void main(String[] args) throws UnsupportedOperationException{
+    //Корень дерева
+    Entry<String> root;
+
+    //Встроенный класс Entry
+    static class Entry<T> implements Serializable {
+        String elementName;
+        int lineNumber;
+        boolean availableToAddLeftChildren, availableToAddRightChildren;
+        Entry<T> parent, leftChild, rightChild;
+
+        public Entry(String str) {
+            this.elementName = str;
+            this.availableToAddLeftChildren = true;
+            this.availableToAddRightChildren = true;
+        }
+
+        void checkChildren() {
+            if (leftChild !=null) {
+                this.availableToAddLeftChildren = false;
+            }
+            if (rightChild != null) {
+                this.availableToAddRightChildren = false;
+            }
+        }
+
+        boolean isAvailableToAddChildren() {
+            return availableToAddLeftChildren || availableToAddRightChildren;
+        }
+    }
+
+    public static void main(String[] args) throws UnsupportedOperationException {
         List<String> list = new CustomTree();
         for (int i = 1; i < 16; i++) {
             list.add(String.valueOf(i));
@@ -18,6 +48,7 @@ public class CustomTree extends AbstractList implements Cloneable, Serializable 
         list.remove("5");
         //System.out.println("Expected null, actual is " + ((CustomTree) list).getParent("11"));
     }
+
 
     @Override
     public String get(int index) {
