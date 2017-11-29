@@ -9,7 +9,17 @@ import java.util.List;
 Построй дерево(1)
 */
 public class CustomTree extends AbstractList implements Cloneable, Serializable {
+    public static void main(String[] args) throws UnsupportedOperationException {
+        List<String> list = new CustomTree();
+        for (int i = 1; i < 16; i++) {
+            list.add(String.valueOf(i));
+        }
+        //System.out.println("Expected 3, actual is " + ((CustomTree) list).getParent("8"));
+        list.remove("5");
+        //System.out.println("Expected null, actual is " + ((CustomTree) list).getParent("11"));
+    }
     //Корень дерева
+
     Entry<String> root;
 
     //Встроенный класс Entry
@@ -17,6 +27,7 @@ public class CustomTree extends AbstractList implements Cloneable, Serializable 
         String elementName;
         int lineNumber;
         boolean availableToAddLeftChildren, availableToAddRightChildren;
+
         Entry<T> parent, leftChild, rightChild;
 
         public Entry(String str) {
@@ -26,7 +37,7 @@ public class CustomTree extends AbstractList implements Cloneable, Serializable 
         }
 
         void checkChildren() {
-            if (leftChild !=null) {
+            if (leftChild != null) {
                 this.availableToAddLeftChildren = false;
             }
             if (rightChild != null) {
@@ -37,20 +48,38 @@ public class CustomTree extends AbstractList implements Cloneable, Serializable 
         boolean isAvailableToAddChildren() {
             return availableToAddLeftChildren || availableToAddRightChildren;
         }
+
     }
 
-    public static void main(String[] args) throws UnsupportedOperationException {
-        List<String> list = new CustomTree();
-        for (int i = 1; i < 16; i++) {
-            list.add(String.valueOf(i));
-        }
-        //System.out.println("Expected 3, actual is " + ((CustomTree) list).getParent("8"));
-        list.remove("5");
-        //System.out.println("Expected null, actual is " + ((CustomTree) list).getParent("11"));
+    private int getLineNumber(Entry entry) {
+        return entry.lineNumber;
     }
 
-    public void add (String elementName){
+    private int maxLineNumber() {
+        return 0;
+    }
 
+    private Entry createNewEntry(Entry parent, String elementName) {
+        Entry entry = new Entry(elementName);
+        entry.lineNumber = maxLineNumber();
+        entry.parent = parent;
+        return entry;
+    }
+
+    public void add(String elementName) {
+        Entry parent = root.isAvailableToAddChildren() ? root : getLastElement(root);
+        ;
+        //Если у root нет детей, добавляем ему
+        createNewEntry(parent, elementName);
+        parent.checkChildren();
+    }
+
+    private Entry getLastElement(Entry entry) {
+        return entry.leftChild;
+    }
+
+    public String getParent(String elementName) {
+        return null;
     }
 
     @Override
