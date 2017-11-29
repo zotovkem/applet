@@ -49,6 +49,9 @@ public class CustomTree extends AbstractList implements Cloneable, Serializable 
         //System.out.println("Expected null, actual is " + ((CustomTree) list).getParent("11"));
     }
 
+    public void add (String elementName){
+
+    }
 
     @Override
     public String get(int index) {
