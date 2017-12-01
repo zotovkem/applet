@@ -3,6 +3,7 @@ package com.javarush.task.task20.task2028;
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 /* 
@@ -10,7 +11,7 @@ import java.util.List;
 */
 public class CustomTree extends AbstractList implements Cloneable, Serializable {
     public static void main(String[] args) throws UnsupportedOperationException {
-        List<String> list = new CustomTree();
+        CustomTree list = new CustomTree();
         for (int i = 1; i < 16; i++) {
             list.add(String.valueOf(i));
         }
@@ -18,9 +19,9 @@ public class CustomTree extends AbstractList implements Cloneable, Serializable 
         list.remove("5");
         //System.out.println("Expected null, actual is " + ((CustomTree) list).getParent("11"));
     }
-    //Корень дерева
 
-    Entry<String> root;
+    //Корень дерева
+    Entry<String> root = new Entry("0");
 
     //Встроенный класс Entry
     static class Entry<T> implements Serializable {
@@ -59,19 +60,26 @@ public class CustomTree extends AbstractList implements Cloneable, Serializable 
         return 0;
     }
 
-    private Entry createNewEntry(Entry parent, String elementName) {
-        Entry entry = new Entry(elementName);
-        entry.lineNumber = maxLineNumber();
-        entry.parent = parent;
-        return entry;
-    }
 
     public void add(String elementName) {
+        //Если у root нет детей, добавляем ему, иначе ищем подходящий элемент.
         Entry parent = root.isAvailableToAddChildren() ? root : getLastElement(root);
-        ;
-        //Если у root нет детей, добавляем ему
-        createNewEntry(parent, elementName);
+        //Заполняем сам узел.
+        Entry entry = new Entry(elementName);
+        entry.lineNumber = parent.lineNumber + 1;
+        entry.parent = parent;
+        //ставим метки занятости Родителю
+        if (parent.availableToAddLeftChildren) {
+            parent.leftChild = entry;
+        } else {
+            if (parent.availableToAddRightChildren) {
+                parent.rightChild = entry;
+            } else {
+                throw new IllegalArgumentException("У родителя нет свободных ссылок");
+            }
+        }
         parent.checkChildren();
+        System.out.println(getParent(entry.elementName));
     }
 
     private Entry getLastElement(Entry entry) {
@@ -79,6 +87,18 @@ public class CustomTree extends AbstractList implements Cloneable, Serializable 
     }
 
     public String getParent(String elementName) {
+        Entry entry = root;
+        while (entry.isAvailableToAddChildren()) {
+            int cmp = entry.elementName.compareTo(elementName);
+            if (cmp == 0) {
+                return entry.parent.elementName;
+            }
+            if (cmp < 0){
+                entry = entry.leftChild;
+            }else{
+                entry = entry.rightChild;
+            }
+        }
         return null;
     }
 
