@@ -1,12 +1,9 @@
 package com.javarush.task.task20.task2028;
 
 import java.io.Serializable;
-import java.util.AbstractList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-/* 
+/*
 Построй дерево(1)
 */
 public class CustomTree extends AbstractList implements Cloneable, Serializable {
@@ -15,15 +12,78 @@ public class CustomTree extends AbstractList implements Cloneable, Serializable 
         for (int i = 1; i < 16; i++) {
             list.add(String.valueOf(i));
         }
-        //System.out.println("Expected 3, actual is " + ((CustomTree) list).getParent("8"));
+
+        while (list.iterator.hasNext()) {
+            System.out.println(((Entry) list.iterator.next()).elementName);
+        }
+
+//        System.out.println("Expected 3, actual is " + ((CustomTree) list).getParent("8"));
         list.remove("5");
         //System.out.println("Expected null, actual is " + ((CustomTree) list).getParent("11"));
     }
 
     //Корень дерева
     Entry<String> root = new Entry("0");
+    Iterator iterator = new EntryIterator();
+    Entry<String> last;
+    int size = 0;
 
-    //Встроенный класс Entry
+    //Итератор дерева
+    class EntryIterator implements Iterable<Entry>, Iterator<Entry> {
+        private Entry current;
+        private Entry last;
+        int nextIndex = 0;
+
+        public EntryIterator() {
+            this.current = CustomTree.this.root;
+        }
+
+        public Iterator<Entry> iterator() {
+            return this;
+        }
+
+        public boolean hasNext() {
+            return nextIndex < CustomTree.this.size;
+        }
+
+        public Entry next() {
+            LinkedList linkedList = new LinkedList();
+            linkedList.poll()
+            nextIndex++;
+            if (current.parent != null) {
+                //Переход между ветками
+                if (current.parent.leftChild.equals(current)) {
+                    current = current.parent.rightChild;
+
+
+                    return current;
+                }
+                //Шаги по ветке дерева.
+                if (current.parent.rightChild.equals(current)) {
+                    if (last != null){
+                        if (!last.availableToAddLeftChildren) {
+                            current = last.leftChild;
+                            last = current;
+                            return current;
+                        }}
+                    last = current;
+                    current = current.parent.leftChild.leftChild;
+                    return current;
+                }
+            }
+            //Вывод чилдов рута
+            if (!current.availableToAddLeftChildren) {
+                current = current.leftChild;
+                return current;
+            }
+            if (!current.availableToAddRightChildren) {
+                current = current.rightChild;
+            }
+            return current;
+        }
+    }
+
+    //Встроенный класс Entry. Узды дерева.
     static class Entry<T> implements Serializable {
         String elementName;
         int lineNumber;
@@ -60,13 +120,18 @@ public class CustomTree extends AbstractList implements Cloneable, Serializable 
         return 0;
     }
 
-
     public void add(String elementName) {
         //Если у root нет детей, добавляем ему, иначе ищем подходящий элемент.
-        Entry parent = root.isAvailableToAddChildren() ? root : getLastElement(root);
+        Entry parent = root.isAvailableToAddChildren() ? root : getLastElement(root.leftChild);
+//        Entry parent = getLastElement(root);
         //Заполняем сам узел.
         Entry entry = new Entry(elementName);
-        entry.lineNumber = parent.lineNumber + 1;
+        if (!root.availableToAddRightChildren || !root.availableToAddLeftChildren)
+            if (!last.parent.isAvailableToAddChildren()) {
+                entry.lineNumber = parent.lineNumber + 1;
+                parent = getLastElement(root.leftChild);
+            }
+
         entry.parent = parent;
         //ставим метки занятости Родителю
         if (parent.availableToAddLeftChildren) {
@@ -79,25 +144,38 @@ public class CustomTree extends AbstractList implements Cloneable, Serializable 
             }
         }
         parent.checkChildren();
-        System.out.println(getParent(entry.elementName));
+        //
+        last = entry;
+        size++;
     }
 
     private Entry getLastElement(Entry entry) {
-        return entry.leftChild;
+        if (entry.isAvailableToAddChildren()) {
+            return entry;
+        } else {
+            if (entry.parent.rightChild.isAvailableToAddChildren()) {
+                return entry.parent.rightChild;
+            } else {
+                return getLastElement(entry.leftChild);
+            }
+        }
+//        return root;
     }
 
     public String getParent(String elementName) {
-        Entry entry = root;
-        while (entry.isAvailableToAddChildren()) {
-            int cmp = entry.elementName.compareTo(elementName);
-            if (cmp == 0) {
-                return entry.parent.elementName;
-            }
-            if (cmp < 0){
-                entry = entry.leftChild;
-            }else{
-                entry = entry.rightChild;
-            }
+        Entry entry = new Entry(elementName);
+        return walkTheTree(entry).parent.elementName;
+    }
+
+    private Entry walkTheTree(Entry entry) {
+        Entry entryStart = root;
+        while (!entryStart.isAvailableToAddChildren()) {
+            if (!entryStart.availableToAddLeftChildren) entryStart = entryStart.leftChild;
+            if (entryStart.elementName.equals(entry.elementName)) return entryStart;
+        }
+        while (!entryStart.isAvailableToAddChildren()) {
+            if (!entryStart.availableToAddRightChildren) entryStart = entryStart.rightChild;
+            if (entryStart.elementName.equals(entry.elementName)) return entryStart;
         }
         return null;
     }
